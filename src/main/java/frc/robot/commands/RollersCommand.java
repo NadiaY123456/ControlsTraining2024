@@ -2,27 +2,28 @@ package frc.robot.commands;
 
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IntakePivotSubsystem;
 import frc.robot.subsystems.IntakeRollerSubsystem;
 
-/** Sets the intake pivot position. */ 
-public class Rollers extends Command {
+/** Sets the roller speed. */ 
+public class RollersCommand extends Command {
     private final IntakeRollerSubsystem rollerSubsystem;
+    private double speed;
 
     /**
-     * Sets the intake pivot to a position.
+     * Sets the rollers to some speed.
      *
-     * @param intakePivotSubsystem The {@link IntakePivotSubsystem} to set the pivot on.
-     * @param position The position [0, 1] to set the pivot to. 0 is stowed, 1 is fully extended.
+     * @param intakeRollerSubsystem The {@link IntakeRollerSubsystem} to set the rollers on.
+     * @param speed The speed to set the rollers to.
      */
-    public Rollers(IntakeRollerSubsystem intakeRollerSubsystem, double position) {
+    public RollersCommand(IntakeRollerSubsystem intakeRollerSubsystem, double speed) {
         this.rollerSubsystem = intakeRollerSubsystem;
         addRequirements(intakeRollerSubsystem);
+        this.speed = speed;
     }
 
     @Override
     public void initialize() {
-        rollerSubsystem.setRollSpeeds(0.2);
+        rollerSubsystem.setRollSpeeds(speed);
         
     }
 

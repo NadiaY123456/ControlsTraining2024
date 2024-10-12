@@ -70,16 +70,38 @@ public class RobotContainer {
     //left trigger moves rollers inwards
     leftBumper.onTrue(new InstantCommand(() -> {IntakeRollerSubsystem.setRollSpeeds(0.2);}, IntakeRollerSubsystem));
 
-    //b button moves rollers inwards
+    //b button sets roller speed to 0 (stops them)
     bButton.onTrue(new InstantCommand(() -> {IntakeRollerSubsystem.setRollSpeeds(0);}, IntakeRollerSubsystem));
 
-    //A button intakes note then gets it to AMP position (basically in and out??? with rolling stuff)
-    bButton.onTrue(new InstantCommand(() -> {IntakePivotSubsystem.setPosition(1);}, IntakePivotSubsystem).andThen(
-      (new InstantCommand(() -> {IntakeRollerSubsystem.setRollSpeeds(0.2);}, IntakeRollerSubsystem)).andThen(
-        if (IntakeRollerSubsystem)
-      )
+    //a button intakes note then gets it to AMP position 
+    //set position to extended, roll in until amp sensor reached
+    //then set position to retracted
+    aButton.onTrue(new InstantCommand(() ->  {
+      IntakePivotSubsystem.setPosition(1);
+      boolean ampSensorState = IntakeRollerSubsystem.getAmpSensor();
+      while(!ampSensorState) {
+        IntakeRollerSubsystem.setRollSpeeds(0.2);
+      }
+      IntakeRollerSubsystem.setRollSpeeds(0);
+      IntakePivotSubsystem.setPosition(0);
 
-    ));
+  }, IntakePivotSubsystem));
+
+    //y button moves from amp position to shooter position if note is there
+    //if amp sensor true, roll out and move out
+    yButton.onTrue(new InstantCommand(() ->  {
+      boolean ampSensorState = IntakeRollerSubsystem.getAmpSensor();
+      if(ampSensorState) {
+        IntakeRollerSubsystem.setRollSpeeds(-0.2);
+        IntakePivotSubsystem.setPosition(1);
+      }
+
+  }, IntakePivotSubsystem));
+
+    //x button retracts (stores)
+    xButton.onTrue(new InstantCommand(() -> {IntakePivotSubsystem.setPosition(0);}, IntakePivotSubsystem)
+
+    );
 
 
 

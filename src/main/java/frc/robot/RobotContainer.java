@@ -6,9 +6,16 @@ package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.IntakePivotSubsystem;
+import frc.robot.subsystems.IntakeRollerSubsystem;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 /**
  * This class is where the bulk of the robot should bPe declared. Since Command-based is a
@@ -18,13 +25,33 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final IntakePivotSubsystem IntakePivotSubsystem;
+    private final IntakePivotSubsystem IntakePivotSubsystem;
+    private final IntakeRollerSubsystem IntakeRollerSubsystem;
+    private final XboxController mechController = new XboxController(2);
+    private final JoystickButton aButton = new JoystickButton(mechController, XboxController.Button.kA.value);
+    private final JoystickButton bButton = new JoystickButton(mechController, XboxController.Button.kB.value);
+    private final JoystickButton leftBumper = new JoystickButton(mechController,
+            XboxController.Button.kLeftBumper.value);
+    private final JoystickButton rightBumper = new JoystickButton(mechController,
+            XboxController.Button.kRightBumper.value);
+    private final JoystickButton xButton = new JoystickButton(mechController, XboxController.Button.kX.value);
+    private final JoystickButton yButton = new JoystickButton(mechController, XboxController.Button.kY.value);
+    private final JoystickButton leftStickButton = new JoystickButton(mechController,
+            XboxController.Button.kLeftStick.value);
+    private final JoystickButton rightStickButton = new JoystickButton(mechController,
+        XboxController.Button.kRightStick.value);
+
   
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     IntakePivotSubsystem = new IntakePivotSubsystem();
+    IntakeRollerSubsystem = new IntakeRollerSubsystem();
     configureBindings();
   }
+
+  
+
+
 
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
@@ -36,6 +63,29 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
+    // right trigger moves rollers outwards
+    rightBumper.onTrue(new InstantCommand(() -> {IntakeRollerSubsystem.setRollSpeeds(-0.2);}, IntakeRollerSubsystem));
+
+    //left trigger moves rollers inwards
+    leftBumper.onTrue(new InstantCommand(() -> {IntakeRollerSubsystem.setRollSpeeds(0.2);}, IntakeRollerSubsystem));
+
+    //b button moves rollers inwards
+    bButton.onTrue(new InstantCommand(() -> {IntakeRollerSubsystem.setRollSpeeds(0);}, IntakeRollerSubsystem));
+
+    //A button intakes note then gets it to AMP position (basically in and out??? with rolling stuff)
+    bButton.onTrue(new InstantCommand(() -> {IntakePivotSubsystem.setPosition(1);}, IntakePivotSubsystem).andThen(
+      (new InstantCommand(() -> {IntakeRollerSubsystem.setRollSpeeds(0.2);}, IntakeRollerSubsystem)).andThen(
+        if (IntakeRollerSubsystem)
+      )
+
+    ));
+
+
+
+
+
+    
 
 
 

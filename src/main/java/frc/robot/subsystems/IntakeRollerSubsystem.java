@@ -42,7 +42,7 @@ public class IntakeRollerSubsystem extends SubsystemBase {
      * Subsystem controls the front, middle, and integration rollers for the intake.
      */
     public IntakeRollerSubsystem() {
-        frontMotors = new CANSparkMax(17, MotorType.kBrushless);
+        frontMotors = new CANSparkMax(IntakeConstants.FRONT_MOTOR_ID, MotorType.kBrushless);
         frontMotors.setIdleMode(IdleMode.kBrake);
         frontMotors.setInverted(true);
         frontSensor = new DigitalInput(3);

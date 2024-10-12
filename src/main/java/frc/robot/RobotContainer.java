@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.IntakePivotSubsystem;
 import frc.robot.subsystems.IntakeRollerSubsystem;
@@ -27,7 +28,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
     private final IntakePivotSubsystem IntakePivotSubsystem;
     private final IntakeRollerSubsystem IntakeRollerSubsystem;
-    private final XboxController mechController = new XboxController(2);
+    private final XboxController mechController = new XboxController(0);
     private final JoystickButton aButton = new JoystickButton(mechController, XboxController.Button.kA.value);
     private final JoystickButton bButton = new JoystickButton(mechController, XboxController.Button.kB.value);
     private final JoystickButton leftBumper = new JoystickButton(mechController,
@@ -65,10 +66,10 @@ public class RobotContainer {
   private void configureBindings() {
 
     // right trigger moves rollers outwards
-    rightBumper.onTrue(new InstantCommand(() -> {IntakeRollerSubsystem.setRollSpeeds(-0.2);}, IntakeRollerSubsystem));
+    rightBumper.onTrue(new InstantCommand(() -> {IntakeRollerSubsystem.setRollSpeeds(IntakeConstants.OUT_ROLL_SPEED);}, IntakeRollerSubsystem));
 
     //left trigger moves rollers inwards
-    leftBumper.onTrue(new InstantCommand(() -> {IntakeRollerSubsystem.setRollSpeeds(0.2);}, IntakeRollerSubsystem));
+    leftBumper.onTrue(new InstantCommand(() -> {IntakeRollerSubsystem.setRollSpeeds(IntakeConstants.IN_ROLL_SPEED);}, IntakeRollerSubsystem));
 
     //b button sets roller speed to 0 (stops them)
     bButton.onTrue(new InstantCommand(() -> {IntakeRollerSubsystem.setRollSpeeds(0);}, IntakeRollerSubsystem));
@@ -80,7 +81,7 @@ public class RobotContainer {
       IntakePivotSubsystem.setPosition(1);
       boolean ampSensorState = IntakeRollerSubsystem.getAmpSensor();
       while(!ampSensorState) {
-        IntakeRollerSubsystem.setRollSpeeds(0.2);
+        IntakeRollerSubsystem.setRollSpeeds(IntakeConstants.IN_ROLL_SPEED);
       }
       IntakeRollerSubsystem.setRollSpeeds(0);
       IntakePivotSubsystem.setPosition(0);
@@ -92,7 +93,7 @@ public class RobotContainer {
     yButton.onTrue(new InstantCommand(() ->  {
       boolean ampSensorState = IntakeRollerSubsystem.getAmpSensor();
       if(ampSensorState) {
-        IntakeRollerSubsystem.setRollSpeeds(-0.2);
+        IntakeRollerSubsystem.setRollSpeeds(IntakeConstants.OUT_ROLL_SPEED);
         IntakePivotSubsystem.setPosition(1);
       }
 

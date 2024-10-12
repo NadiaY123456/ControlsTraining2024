@@ -20,6 +20,9 @@ public final class Constants {
   /** Constants for the intake subsystems. */
   public static class IntakeConstants {
     public static final int PIVOT_MOTOR_ID = 16;
+    public static final int FRONT_MOTOR_ID = 17;
+    public static final double OUT_ROLL_SPEED = -0.2;
+    public static final double IN_ROLL_SPEED = 0.2;
     
     public static final double PIVOT_P = 1; //old 2.5
     public static final double PIVOT_I = 0;
